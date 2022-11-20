@@ -17,22 +17,13 @@
 .. |ReadTheDocs| image:: https://readthedocs.org/projects/sklearn-template/badge/?version=latest
 .. _ReadTheDocs: https://sklearn-template.readthedocs.io/en/latest/?badge=latest
 
-project-template - A template for scikit-learn contributions
-============================================================
+scikit-learn-efs-predictor - Evolutionary Feature Selection for Scikit Learn
+============================================================================
 
 .. _scikit-learn: https://scikit-learn.org
 
-**project-template** is a template project for scikit-learn_ compatible
-extensions.
+**skl-efs-predictor** is a scikit-learn_ compatible extension providing an evolutionary algorithm for selecting
+features form a large data set for best fit scoring.
 
-It aids development of estimators that can be used in scikit-learn pipelines
-and (hyper)parameter search, while facilitating testing (including some API
-compliance), documentation, open source development, packaging, and continuous
-integration.
-
-.. _documentation: https://sklearn-template.readthedocs.io/en/latest/quick_start.html
-
-Refer to the documentation_ to modify the template for your own scikit-learn
-contribution.
-
-*Thank you for cleanly contributing to the scikit-learn ecosystem!*
+It is primarily intended for applications like quantitative structure activity relation in chemistry where data sets
+are vastly underdetermined.
