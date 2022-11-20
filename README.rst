@@ -1,21 +1,16 @@
 .. -*- mode: rst -*-
 
-|Travis|_ |AppVeyor|_ |Codecov|_ |CircleCI|_ |ReadTheDocs|_
+|Codecov|_ |CircleCI|_ |ReadTheDocs|_
 
-.. |Travis| image:: https://travis-ci.org/scikit-learn-contrib/project-template.svg?branch=master
-.. _Travis: https://travis-ci.org/scikit-learn-contrib/project-template
+.. |Codecov| image:: https://codecov.io/gh/janknaup/skl-efs-predictor/branch/master/graph/badge.svg
+.. _Codecov: https://codecov.io/gh/janknaup/skl-efs-predictor
 
-.. |AppVeyor| image:: https://ci.appveyor.com/api/projects/status/coy2qqaqr1rnnt5y/branch/master?svg=true
-.. _AppVeyor: https://ci.appveyor.com/project/glemaitre/project-template
+.. |CircleCi| image:: https://dl.circleci.com/status-badge/img/gh/janknaup/skl-efs-predictor/tree/master.svg?style=svg&circle-token=82a5fc8befbf0bdbd222b02ddca4f018a76df0d2
+.. _CircleCi: https://dl.circleci.com/status-badge/redirect/gh/janknaup/skl-efs-predictor/tree/master
 
-.. |Codecov| image:: https://codecov.io/gh/scikit-learn-contrib/project-template/branch/master/graph/badge.svg
-.. _Codecov: https://codecov.io/gh/scikit-learn-contrib/project-template
-
-.. |CircleCI| image:: https://circleci.com/gh/scikit-learn-contrib/project-template.svg?style=shield&circle-token=:circle-token
-.. _CircleCI: https://circleci.com/gh/scikit-learn-contrib/project-template/tree/master
-
-.. |ReadTheDocs| image:: https://readthedocs.org/projects/sklearn-template/badge/?version=latest
-.. _ReadTheDocs: https://sklearn-template.readthedocs.io/en/latest/?badge=latest
+.. |ReadTheDocs| image:: https://readthedocs.org/projects/skl-efs-predictor/badge/?version=latest
+.. _ReadTheDocs: https://skl-efs-predictor.readthedocs.io/en/latest/?badge=latest
+.. :alt: Documentation Status
 
 scikit-learn-efs-predictor - Evolutionary Feature Selection for Scikit Learn
 ============================================================================
@@ -26,4 +21,4 @@ scikit-learn-efs-predictor - Evolutionary Feature Selection for Scikit Learn
 features form a large data set for best fit scoring.
 
 It is primarily intended for applications like quantitative structure activity relation in chemistry where data sets
-are vastly underdetermined.
+are vastly under-determined.
