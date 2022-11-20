@@ -6,29 +6,12 @@ This is an example on how to document the API of your own project.
 
 .. currentmodule:: evolutionary_feature_selection
 
-Estimator
-=========
+EvolutionaryFeatureSelection
+============================
 
 .. autosummary::
    :toctree: generated/
    :template: class.rst
 
-   TemplateEstimator
+   EvolutionaryFeatureSelection
 
-Transformer
-===========
-
-.. autosummary::
-   :toctree: generated/
-   :template: class.rst
-
-   TemplateTransformer
-
-Predictor
-=========
-
-.. autosummary::
-   :toctree: generated/
-   :template: class.rst
-
-    TemplateClassifier
