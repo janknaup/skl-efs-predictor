@@ -1,5 +1,7 @@
 version: 2
 
+orbs:
+  codecov: codecov/codecov@1.0.2
 jobs:
   build:
     docker:
@@ -26,6 +28,8 @@ jobs:
           destination: doc
       - store_artifacts:
           path: ~/log.txt
+      - codecov/upload:
+          file: { { coverage_report_filepath } }
       - run: ls -ltrh doc/_build/html
     filters:
       branches:

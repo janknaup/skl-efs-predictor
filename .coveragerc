@@ -2,8 +2,8 @@
 
 [run]
 branch = True
-source = skltemplate
-include = */skltemplate/*
+source = evolutionary_feature_selection
+include = */evolutionary_feature_selection/*
 omit =
     */setup.py
 
