@@ -22,6 +22,7 @@ jobs:
             pip install .
             cd doc
             make html
+            cd ..
       - store_artifacts:
           path: doc/_build/html/
           destination: doc
@@ -37,7 +38,7 @@ jobs:
             chmod +x codecov 
             ./codecov
       - store_artifacts:
-          path: ~/htmlcov
+          path: htmlcov
       - run: ls -ltrh doc/_build/html
     filters:
       branches:
