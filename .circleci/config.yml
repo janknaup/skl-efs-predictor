@@ -18,7 +18,8 @@ jobs:
             source activate testenv
             conda install --yes pip numpy scipy scikit-learn matplotlib sphinx sphinx_rtd_theme numpydoc pillow
             pip install sphinx-gallery
-            pip install pytest coverage
+            pip install pytest
+            pip install coverage --user
             pip install .
             cd doc
             make html
@@ -31,9 +32,11 @@ jobs:
       - run:
           name: code coverage
           command: |
-            coverage run -m pytest evolutionary_feature_selection/tests
-            coverage report
-            coverage html
+            pwd
+            ls
+            $HOME/.local/bin/coverage run -m pytest evolutionary_feature_selection/tests
+            $HOME/.local/bin/coverage report
+            $HOME/.local/bin/coverage html
             curl -Os https://uploader.codecov.io/latest/linux/codecov
             chmod +x codecov 
             ./codecov
