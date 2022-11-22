@@ -3,7 +3,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: circleci/python:3.6.1
+      - image: python:3.10.8
     working_directory: ~/repo
     steps:
       - checkout
@@ -30,7 +30,6 @@ jobs:
       - run:
           name: code coverage
           command: |
-            cd evolutionary_features_selection/tests
             coverage run -m pytest evolutionary_feature_selection/tests
             coverage report
             coverage html
