@@ -155,7 +155,7 @@ class EvolutionaryFeatureSelection(BaseEstimator, SelectorMixin):
         return self.current_specimen_
 
     def fit(self, X, y):
-        X, y = check_X_y(X, y)
+        X, y = check_X_y(X, y, ensure_min_features=2)
         self.n_features_in_ = X.shape[1]
         if self.predictor is None:
             self.predictor_ = LinearRegression()
