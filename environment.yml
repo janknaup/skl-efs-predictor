@@ -1,4 +1,4 @@
-name: project-template
+name: evolutionary_feature_selection
 dependencies:
   - numpy
   - scipy
