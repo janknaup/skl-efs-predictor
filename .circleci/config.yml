@@ -35,7 +35,8 @@ jobs:
             pwd
             ls
             $HOME/.local/bin/coverage run -m pytest evolutionary_feature_selection/tests
-            $HOME/.local/bin/coverage report
+            $HOME/.local/bin/coverage xml
+            ls
             $HOME/.local/bin/coverage html
             curl -Os https://uploader.codecov.io/latest/linux/codecov
             chmod +x codecov 
