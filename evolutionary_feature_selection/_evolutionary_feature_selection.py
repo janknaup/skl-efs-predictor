@@ -120,8 +120,8 @@ class EvolutionaryFeatureSelection(BaseEstimator, SelectorMixin):
         self.random_state_ = check_random_state(self.random_state)
         self.population_ = np.zeros((self.population_size, n_features_in), dtype=bool)
         if self.initial_population is not None:
-            row = self.initial_population.shape[1]
-            self.population_[0:min(self.initial_population.shape[1], self.population_size)] = self.initial_population
+            row = min(self.initial_population.shape[0], self.population_size)
+            self.population_[0:row] = self.initial_population[0:row]
         else:
             row = 0
         while row < self.population_size:
@@ -170,7 +170,7 @@ class EvolutionaryFeatureSelection(BaseEstimator, SelectorMixin):
         # set initial fitness values and sort initial specimens by fitness
         self.fitness_values_ = np.zeros(self.population_size, dtype=float)
         self._calculate_fitness_values(X, y)
-        fitness_order = np.argsort(self.fitness_values_)
+        fitness_order = np.argsort(- self.fitness_values_)
         self.population_ = self.population_[fitness_order]
         self.fitness_values_ = self.fitness_values_[fitness_order]
         self.current_specimen_ = self.population_[0]
@@ -191,12 +191,12 @@ class EvolutionaryFeatureSelection(BaseEstimator, SelectorMixin):
                 if self.random_state_.rand() <= self.mutation_rate:
                     temp_pop[offspring_idx] = self._mutate(temp_pop[offspring_idx])
                 temp_fitness_values[offspring_idx] = self._calculate_fitness_specimen(X, y, temp_pop[offspring_idx])
-            fitness_order = np.argsort(temp_fitness_values)[0:self.population_size]
+            fitness_order = np.argsort(-temp_fitness_values)[0:self.population_size]
             self.population_ = temp_pop[fitness_order]
             self.fitness_values_ = temp_fitness_values[fitness_order]
             self.current_specimen_ = self.population_[0]
-            self.fitness_history_[generation + 1] = self.fitness_values_
             generation += 1
+            self.fitness_history_[generation] = self.fitness_values_
             if generation >= self.generations:
                 converged = True
         return self
