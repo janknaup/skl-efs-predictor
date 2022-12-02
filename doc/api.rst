@@ -1,8 +1,6 @@
-####################
-project-template API
-####################
-
-This is an example on how to document the API of your own project.
+##################################
+evolutionary_feature_selection API
+##################################
 
 .. currentmodule:: evolutionary_feature_selection
 

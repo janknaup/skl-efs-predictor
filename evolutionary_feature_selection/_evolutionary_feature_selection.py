@@ -13,7 +13,7 @@ class EvolutionaryFeatureSelection(BaseEstimator, SelectorMixin):
     """ A feature selection transformer that selects a set of features of given size by evolutionary optimization
 
     The optimization is performed in a procreation-mutation-selection cycle with the fitness calculated as the
-        validation score of the predictor fitted using a particular selection of features.
+    validation score of the predictor fitted using a particular selection of features.
 
     Parameters
     ----------

@@ -66,3 +66,5 @@ doc/out/
 
 # PyBuilder
 target/
+/doc/.$EvolutionaryFeatureSelectionFlowChart.drawio.dtmp
+/doc/_generated/
