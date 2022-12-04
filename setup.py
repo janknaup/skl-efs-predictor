@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-"""A template for scikit-learn compatible packages."""
+"""An evolutionary feature selection transformer for scikit learn."""
 
 import codecs
 import os
@@ -7,19 +7,19 @@ import os
 from setuptools import find_packages, setup
 
 # get __version__ from _version.py
-ver_file = os.path.join('skltemplate', '_version.py')
+ver_file = os.path.join('evolutionary_feature_selection', '_version.py')
 with open(ver_file) as f:
     exec(f.read())
 
-DISTNAME = 'sklearn-template'
-DESCRIPTION = 'A template for scikit-learn compatible packages.'
+DISTNAME = 'sklearn-evolutionary-feature-selection'
+DESCRIPTION = 'An evolutionary feature selection transformer for scikit learn.'
 with codecs.open('README.rst', encoding='utf-8-sig') as f:
     LONG_DESCRIPTION = f.read()
-MAINTAINER = 'V. Birodkars, G. Lemaitre'
-MAINTAINER_EMAIL = 'vighneshbirodkar@nyu.edu, g.lemaitre58@gmail.com'
-URL = 'https://github.com/scikit-learn-contrib/project-template'
+MAINTAINER = 'Jan M. Knaup'
+MAINTAINER_EMAIL = 'jan.knaup@gmail.com'
+URL = 'https://github.com/janknaup/skl-efs-predictor'
 LICENSE = 'new BSD'
-DOWNLOAD_URL = 'https://github.com/scikit-learn-contrib/project-template'
+DOWNLOAD_URL = 'https://github.com/janknaup/skl-efs-predictor'
 VERSION = __version__
 INSTALL_REQUIRES = ['numpy', 'scipy', 'scikit-learn']
 CLASSIFIERS = ['Intended Audience :: Science/Research',
