@@ -158,12 +158,6 @@ class EvolutionaryFeatureSelection(BaseEstimator, SelectorMixin):
     def fit(self, X, y):
         self._validate_data(X=X, y=y, reset=True)
         X, y = check_X_y(X, y, ensure_min_features=2)
-        self._check_n_features(X, reset=True)
-        # self._check_feature_names(X, reset=True) This has no meaningful function yet
-        if hasattr(X, "columns"):
-            self.feature_names_in_ = np.asarray(X.columns, dtype=object)
-        else:
-            self.feature_names_in_ = np.array(["X{0:d}".format(i) for i in range(self.n_features_in_)])
         if self.predictor is None:
             self.predictor_ = LinearRegression()
         else:
