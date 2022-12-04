@@ -1,5 +1,6 @@
 import pytest
 import numpy as np
+import pandas as pd
 
 from sklearn.datasets import load_iris
 from sklearn.linear_model import LinearRegression
@@ -95,26 +96,27 @@ def synthetic_dataset():
          10.67343369, 13.97464298, 10.91001649, 12.02196237, 9.76558201,
          12.12622737, 5.99678822, 9.00129322, 7.26769625, 10.68338695]
     )
-    return X, y_fit, y_true
+    X_df = pd.DataFrame(X, columns=["D{0:02d}".format(i) for i in range(X.shape[1])])
+    return X, y_fit, y_true, X_df
 
 
 def test_evolutionary_feature_selection(data, regressor, synthetic_dataset):
     # fit on bullshit data
     est = EvolutionaryFeatureSelection(random_state=31337, n_features=2)
     est.fit(*data)
-    assert_allclose(est.transform(data[0][0:5, :]), np.array([[3.5, 0.2],
-                                                              [3., 0.2],
-                                                              [3.2, 0.2],
-                                                              [3.1, 0.2],
-                                                              [3.6, 0.2]]),
-                    err_msg="Transformed features differ from reference")
+    assert_allclose(est.transform(data[0][0:5, :]), np.array([[1.4, 0.2],
+                                                              [1.4, 0.2],
+                                                              [1.3, 0.2],
+                                                              [1.5, 0.2],
+                                                              [1.4, 0.2]]),
+                 err_msg="Transformed features differ from reference")
     assert_allclose(est.fitness_values_, est.fitness_history_[-1],
                     err_msg="Fitness and fitness_history inconsistent")
-    assert_allclose(est.fitness_values_, np.array([0.92173051, 0.92173051, 0.91498288, 0.91498288, 0.91498288,
-                                                   0.91498288, 0.91498288, 0.91498288, 0.91498288, 0.91498288]),
+    assert_allclose(est.fitness_values_, np.array([0.92574512, 0.92574512, 0.92574512, 0.92574512, 0.92574512,
+                                                   0.92574512, 0.92574512, 0.92574512, 0.92574512, 0.92574512]),
                     err_msg="Fitted population fitness values differ from reference")
     assert_allclose(est.fitness_history_[0], np.array([0.92173051, 0.92173051, 0.91498288, 0.91498288, 0.91498288,
-                                                       0.91498288, 0.9149828, 0.90115939, 0.90115939, 0.61240208]),
+                                                       0.91498288, 0.9149828,  0.90115939, 0.90115939, 0.61240208]),
                     err_msg="Initial population fitness values differ from reference")
     # non-default regressor and scoring
 
@@ -130,10 +132,17 @@ def test_evolutionary_feature_selection(data, regressor, synthetic_dataset):
     assert_allclose(est3.fitness_history_[0], est.fitness_values_,
                     err_msg="Fitness mismatch on passed initial population")
     # test successful feature selection
-    est4 = EvolutionaryFeatureSelection(generations=40, n_features=5, population_size=20, n_breeders=8,
-                                        mutation_rate=0.2)
+    est4 = EvolutionaryFeatureSelection(generations=50, n_features=5, population_size=20, n_breeders=8,
+                                        mutation_rate=0.1, random_state=1337)
     est4.fit(synthetic_dataset[0], synthetic_dataset[2])
     assert_array_equal(est4.get_support(), np.array([True, True, True, True, True, False, False, False, False,
                                                      False, False, False, False, False, False, False, False, False,
                                                      False, False]),
                        err_msg="Wrong features selected from synthetic data set")
+    assert_array_equal(est4.get_feature_names_out(), np.array(['x0', 'x1', 'x2', 'x3', 'x4']),
+                       err_msg="Generated feature names differ")
+    est5 = EvolutionaryFeatureSelection(generations=50, n_features=5, population_size=20, n_breeders=8,
+                                        mutation_rate=0.1, random_state=1337)
+    est5.fit(synthetic_dataset[3], synthetic_dataset[2])
+    assert_array_equal(est5.get_feature_names_out(), np.array(['D00', 'D01', 'D02', 'D03', 'D04']))
+
