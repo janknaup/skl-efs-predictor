@@ -83,7 +83,7 @@ class EvolutionaryFeatureSelection(BaseEstimator, SelectorMixin):
         modified array-like of feature indices or column names
 
         """
-        self.random_state_ = check_random_state(self.random_state)
+        self.random_state_ = check_random_state(self.random_state_)
         new_specimen = np.array(specimen)
         for i in range(self.n_mutation_features):
             new_specimen[self.random_state_.choice(np.argwhere(specimen).ravel())] = False
@@ -103,7 +103,7 @@ class EvolutionaryFeatureSelection(BaseEstimator, SelectorMixin):
         -------
         mask array
         """
-        self.random_state_ = check_random_state(self.random_state)
+        self.random_state_ = check_random_state(self.random_state_)
         offspring = father + mother
         while np.count_nonzero(offspring) > self.n_features:
             offspring[self.random_state_.choice(np.argwhere(offspring).ravel())] = False
@@ -117,7 +117,7 @@ class EvolutionaryFeatureSelection(BaseEstimator, SelectorMixin):
         ----------
         n_features_in : int number of features in the input data set
         """
-        self.random_state_ = check_random_state(self.random_state)
+        self.random_state_ = check_random_state(self.random_state_)
         self.population_ = np.zeros((self.population_size, n_features_in), dtype=bool)
         if self.initial_population is not None:
             row = min(self.initial_population.shape[0], self.population_size)
@@ -152,11 +152,18 @@ class EvolutionaryFeatureSelection(BaseEstimator, SelectorMixin):
         return fitness
 
     def _get_support_mask(self):
+        check_is_fitted(self, ("population_", "current_specimen_", "fitness_values_"))
         return self.current_specimen_
 
     def fit(self, X, y):
+        self._validate_data(X=X, y=y, reset=True)
         X, y = check_X_y(X, y, ensure_min_features=2)
-        self.n_features_in_ = X.shape[1]
+        self._check_n_features(X, reset=True)
+        # self._check_feature_names(X, reset=True) This has no meaningful function yet
+        if hasattr(X, "columns"):
+            self.feature_names_in_ = np.asarray(X.columns, dtype=object)
+        else:
+            self.feature_names_in_ = np.array(["X{0:d}".format(i) for i in range(self.n_features_in_)])
         if self.predictor is None:
             self.predictor_ = LinearRegression()
         else:
