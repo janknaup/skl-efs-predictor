@@ -19,6 +19,7 @@ jobs:
             conda install --yes pip numpy scipy scikit-learn matplotlib sphinx sphinx_rtd_theme numpydoc pillow
             pip install sphinx-gallery
             pip install pytest
+            pip install pandas
             pip install coverage --user
             pip install .
             cd doc
