@@ -44,11 +44,11 @@ class EvolutionaryFeatureSelection(BaseEstimator, SelectorMixin):
     ----------
     random_state_ : Numpy random state
         For testing and consistent parallel processing
-    population_ : Ndarray shape(population_size, n_features_in_)
+    population_ : Ndarray shape(population_size, n_features_in)
         The full population of feature masks in the current iteration/generation
     fitness_values_ : Ndarray, shape(population_size)
         The fitness/score values of the population
-    current_specimen_ : Ndarray, shape(n_features_in_)
+    current_specimen_ : Ndarray, shape(n_features_in)
         The specimen with the highest fitness value, same as population_[0]
     fitness_history_ : Ndarray, shape(generations, population_size)
         Trace of the population fitness values over along all generations for fit debugging and quality assessment
