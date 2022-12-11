@@ -124,6 +124,7 @@ def test_evolutionary_feature_selection(data, regressor, synthetic_dataset):
     est2.fit(*data)
     assert type(est2.predictor_) is regressor, "predictor not passed correctly from constructor"
     assert (est2.scoring_) is nd_scoring, "scoring not passed correctly from constructor"
+    assert not hasattr(est2, 'population_history_'), "Population history generated when not requested"
     # initial population
     # same size initial population
     # we can only indirectly detect sameness of initial populations by comparing initial fitness values
@@ -133,8 +134,9 @@ def test_evolutionary_feature_selection(data, regressor, synthetic_dataset):
                     err_msg="Fitness mismatch on passed initial population")
     # test successful feature selection
     est4 = EvolutionaryFeatureSelection(generations=50, n_features=5, population_size=20, n_breeders=8,
-                                        mutation_rate=0.1, random_state=1337)
+                                        mutation_rate=0.1, random_state=1337, population_trace=True)
     est4.fit(synthetic_dataset[0], synthetic_dataset[2])
+    assert hasattr(est4, 'population_history_'), "Population history not generated when requested"
     assert_array_equal(est4.get_support(), np.array([True, True, True, True, True, False, False, False, False,
                                                      False, False, False, False, False, False, False, False, False,
                                                      False, False]),
