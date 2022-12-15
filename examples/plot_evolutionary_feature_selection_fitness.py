@@ -1,15 +1,20 @@
 """
-==========================================
-Evolutionary Feature Selection Transformer
-==========================================
+=================================================================
+Evolutionary Feature Selection Transformer - Fitness of Specimens
+=================================================================
 
-An example plot of :class:`evolutionary_feature_selection.EvolutionaryFeatureSelection` fitness and population traces.
+An example plot of :class:`evolutionary_feature_selection.EvolutionaryFeatureSelection` fitness trace.
 
 The data set has 20 features, all of which are random in the range [0..1]. The response depends only on the first 5
 variables by the formula:
 
     0.5 + (8.0 * X[:, 0]) + (6.0 * X[:, 1]) + (4.0 * X[:, 2]) + (2.0 * X[:,  3]) + X[:, 4]
 
+Each line in the plot shows the fitness of the specimen occupying one place in the population, ranked by the fitness
+value.
+
+The algorithm is set up to contain 20 specimens, the top 50% of which (10) are allowed to breed. Each specimen is
+set to contain 5 features.
 """
 
 import numpy as np
@@ -26,17 +31,12 @@ efs = EvolutionaryFeatureSelection(generations=45, population_size=20, n_breeder
                                    random_state=rand_stat, population_trace=True)
 efs.fit(X, y_true)
 
-fig, ax = plt.subplots(2, 1, squeeze=False, sharex='all')
-
 # Full population fitness
-ax[0][0].plot(efs.fitness_history_)
-ax[0][0].set_ylabel('R² Score')
-ax[0][0].set_ylim((0.0, 1.05))
+plt.plot(efs.fitness_history_)
+plt.ylabel('R² score')
+plt.xlabel('generation')
+plt.ylim((0.0, 1.05))
+plt.grid(axis='y')
+plt.title('Fitnesses of all Specimens')
 
-ax[1][0].pcolormesh(np.mean(efs.population_history_, axis=1).transpose())
-ax[1][0].set_ylabel('Feature')
-ax[1][0].set_xlabel('Iteration')
-
-fig.suptitle('Specimen Fitness and Feature Frequency')
-fig.show()
-
+plt.show()

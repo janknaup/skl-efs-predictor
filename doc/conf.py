@@ -214,7 +214,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'project-templatedoc'
+htmlhelp_basename = 'evolutionary_feature_selection'
 
 
 # -- Options for LaTeX output ---------------------------------------------
@@ -234,8 +234,8 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  ('index', 'project-template.tex', u'project-template Documentation',
-   u'Vighnesh Birodkar', 'manual'),
+  ('index', 'evolutionary_feature_selection.tex', u'Evolutionary Feature Selection Documentation',
+   u'Jan M. Knaup', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -264,8 +264,8 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'project-template', u'project-template Documentation',
-     [u'Vighnesh Birodkar'], 1)
+    ('index', 'evolutionary-feature-selection', u'evolutionary-feature-selection Documentation',
+     [u'Jan M. Knaup'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -278,8 +278,9 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'project-template', u'project-template Documentation',
-   u'Vighnesh Birodkar', 'project-template', 'One line description of project.',
+  ('index', 'evolutionary-feature-selection', u'evolutionary-feature-selection Documentation',
+   u'Jan M. Knaup', 'evolutionary-feature-selection',
+   'Scikit-learn extension for evolutionary selection of model features.',
    'Miscellaneous'),
 ]
 
@@ -309,13 +310,13 @@ intersphinx_mapping = {
 
 # sphinx-gallery configuration
 sphinx_gallery_conf = {
-    'doc_module': 'skltemplate',
+    'doc_module': 'evolutionary_feature_selection',
     'backreferences_dir': os.path.join('generated'),
     'reference_url': {
-        'skltemplate': None}
+        'evolutionary_feature_selection': None}
 }
 
 def setup(app):
     # a copy button to copy snippet of code from the documentation
-    #app.add_javascript('js/copybutton.js')
+    app.add_js_file('js/copybutton.js')
     pass
