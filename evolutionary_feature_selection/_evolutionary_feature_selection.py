@@ -59,13 +59,14 @@ class EvolutionaryFeatureSelection(BaseEstimator, SelectorMixin):
                  generations=10, initial_population=None, random_state=None):
         self.predictor = predictor
         self.scoring = scoring
-        self.n_features = check_scalar(n_features, "n_features", int, min_val=1)
-        self.population_size = check_scalar(population_size, "population_size", int, min_val=1)
-        self.n_breeders = check_scalar(n_breeders, "n_breeders", int, min_val=1)
-        self.mutation_rate = check_scalar(mutation_rate, "mutation_rate", float, min_val=0, max_val=1)
-        self.n_mutation_features = check_scalar(n_mutation_features, "n_mutation_features", int, min_val=0,
-                                                max_val=self.n_features)
-        self.generations = check_scalar(generations, "generations", int, min_val=1)
+        self.n_features = check_scalar(n_features, "n_features", (int, np.int64, np.int32), min_val=1)
+        self.population_size = check_scalar(population_size, "population_size", (int, np.int64, np.int32), min_val=1)
+        self.n_breeders = check_scalar(n_breeders, "n_breeders", (int, np.int64, np.int32), min_val=1)
+        self.mutation_rate = check_scalar(mutation_rate, "mutation_rate", (float, np.float64, np.float32),
+                                          min_val=0, max_val=1)
+        self.n_mutation_features = check_scalar(n_mutation_features, "n_mutation_features", (int, np.int64, np.int32),
+                                                min_val=0, max_val=self.n_features)
+        self.generations = check_scalar(generations, "generations", (int, np.int64, np.int32), min_val=1)
         self.initial_population = initial_population
         self.random_state = random_state
 
