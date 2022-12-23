@@ -102,14 +102,14 @@ def synthetic_dataset():
 
 def test_evolutionary_feature_selection(data, regressor, synthetic_dataset):
     # fit on bullshit data
-    est = EvolutionaryFeatureSelection(random_state=31337, n_features=2)
+    est = EvolutionaryFeatureSelection(random_state=31337, n_features=2, fitness_trace=True)
     est.fit(*data)
     assert_allclose(est.transform(data[0][0:5, :]), np.array([[1.4, 0.2],
                                                               [1.4, 0.2],
                                                               [1.3, 0.2],
                                                               [1.5, 0.2],
                                                               [1.4, 0.2]]),
-                 err_msg="Transformed features differ from reference")
+                    err_msg="Transformed features differ from reference")
     assert_allclose(est.fitness_values_, est.fitness_history_[-1],
                     err_msg="Fitness and fitness_history inconsistent")
     assert_allclose(est.fitness_values_, np.array([0.92574512, 0.92574512, 0.92574512, 0.92574512, 0.92574512,
@@ -118,17 +118,19 @@ def test_evolutionary_feature_selection(data, regressor, synthetic_dataset):
     assert_allclose(est.fitness_history_[0], np.array([0.92173051, 0.92173051, 0.91498288, 0.91498288, 0.91498288,
                                                        0.91498288, 0.9149828,  0.90115939, 0.90115939, 0.61240208]),
                     err_msg="Initial population fitness values differ from reference")
+    assert hasattr(est, "fitness_history_"), "Fitness history not generated when requested"
     # non-default regressor and scoring
-
     est2 = EvolutionaryFeatureSelection(predictor=regressor, scoring=nd_scoring, random_state=1337, n_features=2)
     est2.fit(*data)
     assert type(est2.predictor_) is regressor, "predictor not passed correctly from constructor"
     assert (est2.scoring_) is nd_scoring, "scoring not passed correctly from constructor"
     assert not hasattr(est2, 'population_history_'), "Population history generated when not requested"
+    assert not hasattr(est2, "fitness_history_"), "Fitness history generated when not requested"
     # initial population
     # same size initial population
     # we can only indirectly detect sameness of initial populations by comparing initial fitness values
-    est3 = EvolutionaryFeatureSelection(initial_population=np.array(est.population_), random_state=1337, n_features=2)
+    est3 = EvolutionaryFeatureSelection(initial_population=np.array(est.population_), random_state=1337, n_features=2,
+                                        fitness_trace=True)
     est3.fit(*data)
     assert_allclose(est3.fitness_history_[0], est.fitness_values_,
                     err_msg="Fitness mismatch on passed initial population")
