@@ -28,7 +28,7 @@ X = rand_stat.random((20, 20))
 y_true = 0.5 + (8.0 * X[:, 0]) + (6.0 * X[:, 1]) + (4.0 * X[:, 2]) + (2.0 * X[:,  3]) + X[:, 4]
 
 efs = EvolutionaryFeatureSelection(generations=45, population_size=20, n_breeders=10, n_features=5,
-                                   random_state=rand_stat, population_trace=True)
+                                   random_state=rand_stat, fitness_trace=True)
 efs.fit(X, y_true)
 
 # Full population fitness

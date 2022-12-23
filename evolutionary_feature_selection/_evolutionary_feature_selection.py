@@ -39,6 +39,8 @@ class EvolutionaryFeatureSelection(BaseEstimator, SelectorMixin):
         continuing previous evolutionary feature selection runs.
     random_state : numpy.random.random_state
         random state for repeatability in testing
+    fitness_trace: bool, default False
+        if True, store trace of finess values during fit. Use with care, may lead to large memory consumption.
     population_trace : bool, default False
         if True, store trace of populations during fit. Use with care, may lead to large memory consumption.
 
@@ -59,7 +61,8 @@ class EvolutionaryFeatureSelection(BaseEstimator, SelectorMixin):
 
     def __init__(self, predictor=None, scoring=None, n_features=1,
                  population_size=10, n_breeders=5, mutation_rate=0.5, n_mutation_features=1,
-                 generations=10, initial_population=None, random_state=None, population_trace=False):
+                 generations=10, initial_population=None, random_state=None,
+                 population_trace=False, fitness_trace=False):
         self.predictor = predictor
         self.scoring = scoring
         self.n_features = check_scalar(n_features, "n_features", (int, np.int64, np.int32), min_val=1)
@@ -73,6 +76,7 @@ class EvolutionaryFeatureSelection(BaseEstimator, SelectorMixin):
         self.initial_population = initial_population
         self.random_state = random_state
         self.population_trace = population_trace
+        self.fitness_trace = fitness_trace
 
     def _mutate(self, specimen):
         """
@@ -181,8 +185,9 @@ class EvolutionaryFeatureSelection(BaseEstimator, SelectorMixin):
         self.fitness_values_ = self.fitness_values_[fitness_order]
         self.current_specimen_ = self.population_[0]
         # iterate generations
-        self.fitness_history_ = np.zeros((self.generations + 1, self.population_size))
-        self.fitness_history_[0] = self.fitness_values_
+        if self.fitness_trace:
+            self.fitness_history_ = np.zeros((self.generations + 1, self.population_size))
+            self.fitness_history_[0] = self.fitness_values_
         if self.population_trace:
             self.population_history_ = np.zeros((self.generations + 1, self.population_size, self.n_features_in_))
             self.population_history_[0] = self.population_
@@ -205,7 +210,8 @@ class EvolutionaryFeatureSelection(BaseEstimator, SelectorMixin):
             self.fitness_values_ = temp_fitness_values[fitness_order]
             self.current_specimen_ = self.population_[0]
             generation += 1
-            self.fitness_history_[generation] = self.fitness_values_
+            if self.fitness_trace:
+                self.fitness_history_[generation] = self.fitness_values_
             if self.population_trace:
                 self.population_history_[generation] = self.population_
             if generation >= self.generations:
