@@ -8,17 +8,20 @@ from sklearn.linear_model import LinearRegression
 
 from evolutionary_feature_selection import EvolutionaryFeatureSelection
 
+
 @pytest.fixture()
 def data():
     rand_stat = np.random.RandomState(31337)
     X = rand_stat.random((20, 20))
-    y_true = 0.5 + (8.0 * X[:, 0]) + (6.0 * X[:, 1]) + (4.0 * X[:, 2]) + (2.0 * X[:,  3]) + X[:, 4]
+    y_true = 0.5 + (8.0 * X[:, 0]) + (6.0 * X[:, 1]) + (4.0 * X[:, 2]) + (2.0 * X[:, 3]) + X[:, 4]
     return X, y_true
+
 
 @pytest.fixture()
 def efs():
     return EvolutionaryFeatureSelection(generations=50, n_features=5, population_size=20, n_breeders=8,
-                                        mutation_rate=0.1, random_state=1337)
+                                        mutation_rate=0.1, random_state=1337, n_jobs=1)
+
 
 def test_efs_pipeline(data, efs):
     pipe = Pipeline([
@@ -27,6 +30,7 @@ def test_efs_pipeline(data, efs):
     pipe.fit(*data)
     assert_array_equal(pipe.get_feature_names_out(), np.array(['x0', 'x1', 'x2', 'x3', 'x4']),
                        err_msg="Wrong features selected in pipeline")
+
 
 def test_efs_gridsearch(data, efs):
     pipe = Pipeline([

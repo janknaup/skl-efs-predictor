@@ -7,6 +7,7 @@ from sklearn.feature_selection import SelectorMixin
 from sklearn.utils.validation import check_X_y, check_is_fitted, check_random_state, check_scalar
 from sklearn.metrics import r2_score
 from sklearn.linear_model import LinearRegression
+from joblib import Parallel, delayed
 
 
 class EvolutionaryFeatureSelection(BaseEstimator, SelectorMixin):
@@ -40,9 +41,11 @@ class EvolutionaryFeatureSelection(BaseEstimator, SelectorMixin):
     random_state : numpy.random.random_state
         random state for repeatability in testing
     fitness_trace: bool, default False
-        if True, store trace of finess values during fit. Use with care, may lead to large memory consumption.
+        if True, store trace of fitness values during fit. Use with care, may lead to large memory consumption.
     population_trace : bool, default False
         if True, store trace of populations during fit. Use with care, may lead to large memory consumption.
+    n_jobs : int, default=1
+        number of parallel jobs to use for compute heavy part of fit
 
     Attributes
     ----------
@@ -62,7 +65,7 @@ class EvolutionaryFeatureSelection(BaseEstimator, SelectorMixin):
     def __init__(self, predictor=None, scoring=None, n_features=1,
                  population_size=10, n_breeders=5, mutation_rate=0.5, n_mutation_features=1,
                  generations=10, initial_population=None, random_state=None,
-                 population_trace=False, fitness_trace=False):
+                 population_trace=False, fitness_trace=False, n_jobs=1):
         self.predictor = predictor
         self.scoring = scoring
         self.n_features = check_scalar(n_features, "n_features", (int, np.int64, np.int32), min_val=1)
@@ -77,6 +80,7 @@ class EvolutionaryFeatureSelection(BaseEstimator, SelectorMixin):
         self.random_state = random_state
         self.population_trace = population_trace
         self.fitness_trace = fitness_trace
+        self.n_jobs = check_scalar(n_jobs, "n_jobs", (int, np.int64, np.int32))
 
     def _mutate(self, specimen):
         """
@@ -178,43 +182,46 @@ class EvolutionaryFeatureSelection(BaseEstimator, SelectorMixin):
         self.random_state_ = check_random_state(self.random_state)
         self._populate(X.shape[1])
         # set initial fitness values and sort initial specimens by fitness
-        self.fitness_values_ = np.zeros(self.population_size, dtype=float)
-        self._calculate_fitness_values(X, y)
-        fitness_order = np.argsort(- self.fitness_values_)
-        self.population_ = self.population_[fitness_order]
-        self.fitness_values_ = self.fitness_values_[fitness_order]
-        self.current_specimen_ = self.population_[0]
-        # iterate generations
-        if self.fitness_trace:
-            self.fitness_history_ = np.zeros((self.generations + 1, self.population_size))
-            self.fitness_history_[0] = self.fitness_values_
-        if self.population_trace:
-            self.population_history_ = np.zeros((self.generations + 1, self.population_size, self.n_features_in_))
-            self.population_history_[0] = self.population_
-        temp_pop_size = (2 * self.population_size) - self.n_breeders
-        converged = False
-        generation = 0
-        while not converged:
-            temp_pop = np.zeros((temp_pop_size, self.n_features_in_), dtype=bool)
-            temp_pop[0:self.population_size] = self.population_
-            temp_fitness_values = np.zeros(temp_pop_size)
-            temp_fitness_values[0:self.population_size] = self.fitness_values_
-            for offspring_idx in range(self.population_size, temp_pop_size):
-                dad, mom = self.random_state_.randint(self.n_breeders, size=2)
-                temp_pop[offspring_idx] = self._procreate(self.population_[dad], self.population_[mom])
-                if self.random_state_.rand() <= self.mutation_rate:
-                    temp_pop[offspring_idx] = self._mutate(temp_pop[offspring_idx])
-                temp_fitness_values[offspring_idx] = self._calculate_fitness_specimen(X, y, temp_pop[offspring_idx])
-            fitness_order = np.argsort(-temp_fitness_values)[0:self.population_size]
-            self.population_ = temp_pop[fitness_order]
-            self.fitness_values_ = temp_fitness_values[fitness_order]
+        with Parallel(n_jobs=self.n_jobs) as parallel:
+            self.fitness_values_ = np.zeros(self.population_size, dtype=float)
+            self._calculate_fitness_values(X, y)
+            fitness_order = np.argsort(- self.fitness_values_)
+            self.population_ = self.population_[fitness_order]
+            self.fitness_values_ = self.fitness_values_[fitness_order]
             self.current_specimen_ = self.population_[0]
-            generation += 1
+            # iterate generations
             if self.fitness_trace:
-                self.fitness_history_[generation] = self.fitness_values_
+                self.fitness_history_ = np.zeros((self.generations + 1, self.population_size))
+                self.fitness_history_[0] = self.fitness_values_
             if self.population_trace:
-                self.population_history_[generation] = self.population_
-            if generation >= self.generations:
-                converged = True
+                self.population_history_ = np.zeros((self.generations + 1, self.population_size, self.n_features_in_))
+                self.population_history_[0] = self.population_
+            temp_pop_size = (2 * self.population_size) - self.n_breeders
+            converged = False
+            generation = 0
+            while not converged:
+                temp_pop = np.zeros((temp_pop_size, self.n_features_in_), dtype=bool)
+                temp_pop[0:self.population_size] = self.population_
+                temp_fitness_values = np.zeros(temp_pop_size)
+                temp_fitness_values[0:self.population_size] = self.fitness_values_
+                for offspring_idx in range(self.population_size, temp_pop_size):
+                    dad, mom = self.random_state_.randint(self.n_breeders, size=2)
+                    temp_pop[offspring_idx] = self._procreate(self.population_[dad], self.population_[mom])
+                    if self.random_state_.rand() <= self.mutation_rate:
+                        temp_pop[offspring_idx] = self._mutate(temp_pop[offspring_idx])
+                temp_fitness_values[self.population_size:] = parallel(
+                    delayed(self._calculate_fitness_specimen)(X, y, temp_pop[i]) for i in
+                    range(self.population_size, temp_pop_size))
+                fitness_order = np.argsort(-temp_fitness_values)[0:self.population_size]
+                self.population_ = temp_pop[fitness_order]
+                self.fitness_values_ = temp_fitness_values[fitness_order]
+                self.current_specimen_ = self.population_[0]
+                generation += 1
+                if self.fitness_trace:
+                    self.fitness_history_[generation] = self.fitness_values_
+                if self.population_trace:
+                    self.population_history_[generation] = self.population_
+                if generation >= self.generations:
+                    converged = True
         return self
 
