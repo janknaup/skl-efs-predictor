@@ -65,7 +65,6 @@ def feature_trace(population_trace, specimen='top', feature_names=None):
     matplotlib figure object
 
     """
-
     if specimen not in ['top', 'all']:
         raise ValueError("Unknown specimen selection ", specimen)
     else:
@@ -86,4 +85,35 @@ def feature_trace(population_trace, specimen='top', feature_names=None):
         #    plt.yticks(labels=feature_names)
         if specimen == 'all':
             plt.colorbar()
+    return fig
+
+def fitness_diversity_trace(fitness_trace, std=True, range=False):
+    """
+    Plots a trace of population fitness diversity measures.
+
+    Parameters
+    ----------
+    fitness_trace : Ndarray, float, shape(generations, population_size)
+        The population trace to be analyzed
+    std : bool, default=True
+        Plot the standard deviation of the population fitness per generation
+    range : bool, default=False
+        Plot the range of population fitness values per generation
+
+    Returns
+    -------
+    matplotlib figure object
+
+    """
+    x = np.arange(fitness_trace.shape[0])
+    fig = plt.figure()
+
+    if std:
+        plt.plot(np.std(fitness_trace, axis=1), label=r"$\sigma$")
+    if range:
+        plt.plot(np.max(fitness_trace, axis=1) - np.min(fitness_trace, axis=1), label="range")
+    plt.title('Fitness Diversity')
+    plt.xlabel('generation')
+    plt.ylabel('fitness')
+    plt.legend()
     return fig
