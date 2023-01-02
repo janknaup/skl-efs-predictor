@@ -1,5 +1,7 @@
 from ._evolutionary_feature_selection import EvolutionaryFeatureSelection
+from ._trace_utilities import fitness_trace, feature_trace, fitness_diversity_trace
 
 from ._version import __version__
 
-__all__ = ['EvolutionaryFeatureSelection', '__version__']
+__all__ = ['EvolutionaryFeatureSelection', 'fitness_trace', 'feature_trace', 'fitness_diversity_trace',
+           '__version__']
