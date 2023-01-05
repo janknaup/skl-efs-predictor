@@ -1,7 +1,6 @@
 """ Utilities for plotting evolutionary feature selection diagnostic traces """
 
 from matplotlib import pyplot as plt
-import matplotlib
 import numpy as np
 def fitness_trace(fitness_trace, top_specimen=True, all_specimens=False, mean=True, range_area=True):
     """
@@ -24,26 +23,20 @@ def fitness_trace(fitness_trace, top_specimen=True, all_specimens=False, mean=Tr
     -------
     figure object
     """
-
     x = np.arange(fitness_trace.shape[0])
     fig = plt.figure()
-
     if top_specimen or all_specimens:
         top_line = plt.plot(fitness_trace[:, 0], label='top fitness', c='blue')
-
     if all_specimens:
         all_lines = plt.plot(fitness_trace[:, 1:], c='black', lw=0.1)
-
     if mean:
         mean_line = plt.plot(np.mean(fitness_trace, axis=1), label='mean fitness', c='red')
-
     if range_area:
         range_area_trace = plt.fill_between(x=x, y1=fitness_trace[:, 0], y2=fitness_trace[:, -1],
                                             facecolor='red', alpha=0.25)
     plt.legend()
     plt.xlabel('generation')
     plt.ylabel('fitness')
-
     return fig
 
 def feature_trace(population_trace, specimen='top', feature_names=None):
@@ -77,7 +70,7 @@ def feature_trace(population_trace, specimen='top', feature_names=None):
             data = np.mean(population_trace, axis=1).transpose()
             title = "Fraction of Population Containing Feature"
             color_scheme = 'viridis'
-        plt.imshow(data, cmap=color_scheme)
+        population_image = plt.imshow(data, cmap=color_scheme)
         plt.title(title)
         plt.xlabel('generation')
         plt.ylabel('feature')
@@ -107,11 +100,10 @@ def fitness_diversity_trace(fitness_trace, std=True, range=False):
     """
     x = np.arange(fitness_trace.shape[0])
     fig = plt.figure()
-
     if std:
-        plt.plot(np.std(fitness_trace, axis=1), label=r"$\sigma$")
+        std_line = plt.plot(np.std(fitness_trace, axis=1), label=r"$\sigma$")
     if range:
-        plt.plot(np.max(fitness_trace, axis=1) - np.min(fitness_trace, axis=1), label="range")
+        range_line = plt.plot(np.max(fitness_trace, axis=1) - np.min(fitness_trace, axis=1), label="range")
     plt.title('Fitness Diversity')
     plt.xlabel('generation')
     plt.ylabel('fitness')
