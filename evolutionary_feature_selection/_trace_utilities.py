@@ -74,8 +74,8 @@ def feature_trace(population_trace, specimen='top', feature_names=None):
         plt.title(title)
         plt.xlabel('generation')
         plt.ylabel('feature')
-        #if feature_names is not None:
-        #    plt.yticks(labels=feature_names)
+        if feature_names is not None:
+            plt.yticks(ticks=np.arange(data.shape[0]), labels=feature_names)
         if specimen == 'all':
             plt.colorbar()
     return fig
