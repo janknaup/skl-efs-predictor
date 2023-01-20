@@ -16,12 +16,13 @@ jobs:
             conda update --yes --quiet conda
             conda create -n testenv --yes --quiet python=3
             source activate testenv
-            conda install --yes pip numpy scipy scikit-learn matplotlib sphinx sphinx_rtd_theme numpydoc pillow
-            pip install sphinx-gallery
-            pip install pytest
-            pip install pandas
-            pip install coverage --user
-            pip install .
+            conda install -q --yes pip numpy scipy scikit-learn matplotlib sphinx sphinx_rtd_theme numpydoc pillow
+            pip install -q sphinx-gallery
+            pip install -q pytest
+            pip install -q pytest-mpl
+            pip install -q pandas
+            pip install -q coverage --user
+            pip install -q .
             cd doc
             make html
             cd ..
@@ -35,15 +36,21 @@ jobs:
           command: |
             pwd
             ls
-            $HOME/.local/bin/coverage run -m pytest evolutionary_feature_selection/tests
+            $HOME/.local/bin/coverage run -m pytest --mpl --mpl-results-path=mpl_results --junitxml=test-report.xml evolutionary_feature_selection/tests
             $HOME/.local/bin/coverage xml
             ls
             $HOME/.local/bin/coverage html
             curl -Os https://uploader.codecov.io/latest/linux/codecov
             chmod +x codecov 
             ./codecov
+      - store_test_results:
+          path: test-report.xml
       - store_artifacts:
           path: htmlcov
+          destination: htmlcov
+      - store_artifacts:
+          path: mpl_results
+          destination: mpl_results
       - run: ls -ltrh doc/_build/html
     filters:
       branches:
