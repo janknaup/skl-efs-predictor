@@ -19,6 +19,7 @@ jobs:
             conda install --yes pip numpy scipy scikit-learn matplotlib sphinx sphinx_rtd_theme numpydoc pillow
             pip install sphinx-gallery
             pip install pytest
+            pip install pytest-mpl
             pip install pandas
             pip install coverage --user
             pip install .
@@ -35,7 +36,7 @@ jobs:
           command: |
             pwd
             ls
-            $HOME/.local/bin/coverage run -m pytest evolutionary_feature_selection/tests
+            $HOME/.local/bin/coverage run -m pytest --mpl evolutionary_feature_selection/tests
             $HOME/.local/bin/coverage xml
             ls
             $HOME/.local/bin/coverage html
