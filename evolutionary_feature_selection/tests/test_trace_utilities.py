@@ -17,14 +17,14 @@ def efs():
     return EvolutionaryFeatureSelection(generations=50, n_features=5, population_size=20, n_breeders=8,
                                         mutation_rate=0.1, random_state=1337)
 
-@pytest.mark.mpl_image_compare
+@pytest.mark.mpl_image_compare(remove_text=True)
 def test_fitness_trace(data, efs):
     efs.fitness_trace = True
     efs.fit(*data)
     trace_fig = fitness_trace(efs.fitness_history_, top_specimen=True, all_specimens=True, mean=True, range_area=True)
     return trace_fig
 
-@pytest.mark.mpl_image_compare
+@pytest.mark.mpl_image_compare(remove_text=True)
 def test_feature_trace(data, efs):
     efs.population_trace = True
     efs.fit(*data)
@@ -33,7 +33,7 @@ def test_feature_trace(data, efs):
                                        feature_names=['X{0:02d}'.format(i) for i in range(len(data[1]))])
     return all_specimen_trace
 
-@pytest.mark.mpl_image_compare
+@pytest.mark.mpl_image_compare(remove_text=True)
 def test_fitness_diversity_trace(data, efs):
     efs.fitness_trace = True
     efs.fit(*data)
