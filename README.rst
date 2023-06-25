@@ -1,12 +1,12 @@
 .. -*- mode: rst -*-
 
-|Codecov|_ |CircleCI|_ |ReadTheDocs|_
+|Codecov|_ |GithubCI|_ |ReadTheDocs|_
 
 .. |Codecov| image:: https://codecov.io/gh/janknaup/skl-efs-predictor/branch/master/graph/badge.svg
 .. _Codecov: https://codecov.io/gh/janknaup/skl-efs-predictor
 
-.. |CircleCi| image:: https://dl.circleci.com/status-badge/img/gh/janknaup/skl-efs-predictor/tree/master.svg?style=svg&circle-token=82a5fc8befbf0bdbd222b02ddca4f018a76df0d2
-.. _CircleCi: https://dl.circleci.com/status-badge/redirect/gh/janknaup/skl-efs-predictor/tree/master
+.. |GithubCI| image:: https://github.com/janknaup/skl-efs-predictor/actions/workflows/skl-efs-predictor.yml/badge.svg
+.. _GithubCI: https://dl.circleci.com/status-badge/redirect/gh/janknaup/skl-efs-predictor/tree/master
 
 .. |ReadTheDocs| image:: https://readthedocs.org/projects/skl-efs-predictor/badge/?version=latest
 .. _ReadTheDocs: https://skl-efs-predictor.readthedocs.io/en/latest/?badge=latest
