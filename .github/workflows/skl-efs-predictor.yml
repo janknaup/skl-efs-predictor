@@ -46,7 +46,9 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: code-coverage-report
-        path: output/test/code-coverage.html
+        path: |
+          coverage.xml
+          htmlcov/index.html
     - name: Build Docs
       run: |
         cd doc
